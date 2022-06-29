@@ -1,0 +1,91 @@
+plugins {
+    id 'java'
+    id 'eclipse'
+//    id 'maven'
+    id 'idea'
+    id 'org.sonarqube' version '2.6'
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+
+group = 'exception'
+
+repositories {
+    mavenCentral()
+}
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+dependencies {
+    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.1.2'
+    implementation 'org.assertj:assertj-core:3.23.1'
+    implementation 'io.cucumber:cucumber-junit:6.9.1'
+    implementation 'io.cucumber:cucumber-java:6.9.1'
+    implementation 'io.cucumber:cucumber-spring:6.9.1'
+    implementation 'org.springframework:spring-test:5.3.19'
+    implementation 'org.springframework:spring-context:5.3.19'
+    implementation 'net.masterthought:cucumber-reporting:5.6.1'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.commons:commons-text:1.9'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.2'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2'
+    implementation 'io.rest-assured:rest-assured:4.5.1'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.slf4j:jul-to-slf4j:1.7.36'
+    implementation 'org.yaml:snakeyaml:1.30'
+    implementation 'io.github.bonigarcia:webdrivermanager:5.0.3'
+}
+
+class TestProperties {
+    boolean CUCUMBER_PUBLISH_QUIET
+    String defaultAdditionalTags
+}
+
+project.extensions.add('chintest', new TestProperties())
+
+chintest {
+    CUCUMBER_PUBLISH_QUIET = true
+    defaultAdditionalTags = "@run_all"
+}
+
+
+task integrationTestCucumberSequential(type:JavaExec, group: 'verification') {
+    task -> configureCucumberTestTask((JavaExec) task, "not @ignore", "Sequential", project, 1)
+}
+
+static void configureCucumberTestTask(JavaExec task, String primaryTag, String runType, Project project, int threads) {
+    TestProperties chintest = project.getExtensions().findByType(TestProperties.class)
+    task.mainClass = "automation.core.framework.Launcher"
+    task.environment("CUCUMBER_PUBLISH_QUIET", project.getProperties().getOrDefault('CUCUMBER_PUBLISH_QUIET', chintest.CUCUMBER_PUBLISH_QUIET))
+    task.args("-g", "automation")
+    task.args("-t", primaryTag)
+    String additionalTags = ((String) project.getProperties().getOrDefault('additionalTags', chintest.defaultAdditionalTags)).trim()
+    if (!additionalTags.isEmpty()) {
+        additionalTags.split(",").each { t -> task.args('-t', t.trim()) }
+    }
+    task.args("-p", "pretty")
+    task.args("-p", "html:build/${runType.toLowerCase()}/report/index.html")
+    task.args("-p", "junit:build/${runType.toLowerCase()}/cukes.xml")
+    task.args("-p", "timeline:build/${runType.toLowerCase()}/timeline")
+    task.args("-p", "json:build/${runType.toLowerCase()}/cucumber.json")
+    task.args("-p", "automation.core.framework.ExceptionEventListener")
+    task.args("src/main/resources/features")
+
+    task.doFirst {project.getLogger().lifecycle("${runType}: " + task.commandLine.join(" "))}
+
+    task.classpath = project.sourceSets.test.runtimeClasspath
+}
+
+task customCucumberSuite() {
+    doLast {
+        integrationTestCucumberSequential.exec()
+    }
+}
+
+integrationTestCucumberSequential.dependsOn('testClasses')
+customCucumberSuite.dependsOn('testClasses')
+
+test.dependsOn('customCucumberSuite')
