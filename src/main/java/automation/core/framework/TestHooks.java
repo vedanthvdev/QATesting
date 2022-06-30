@@ -50,7 +50,7 @@ public class TestHooks {
 
     @After("@delete_all_pets")
     public void deletePets() {
-        petClientService.deleteAllPets();
+//        petClientService.deleteAllPets();
     }
 
     private String getToken() {
