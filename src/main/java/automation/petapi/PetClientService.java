@@ -1,4 +1,4 @@
-package automation.petservice.pet;
+package automation.petapi;
 
 import io.restassured.RestAssured;
 import org.apache.http.HttpStatus;

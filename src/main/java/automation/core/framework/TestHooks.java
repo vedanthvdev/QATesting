@@ -1,6 +1,6 @@
 package automation.core.framework;
 
-import automation.petservice.pet.PetClientService;
+import automation.petapi.PetClientService;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;

@@ -1,13 +1,11 @@
-package automation.petservice.pet;
+package automation.petapi;
 
-import automation.petservice.pet.submodules.Category;
-import automation.petservice.pet.submodules.Tags;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import automation.petapi.submodules.Category;
+import automation.petapi.submodules.Tags;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import automation.petservice.pet.Status;
 
 import java.util.ArrayList;
 import java.util.Arrays;
