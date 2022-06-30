@@ -14,15 +14,15 @@ public class PetStoreApiSteps {
         this.petClientService = petClientService;
     }
 
-    @When("the petstore endpoint is called")
-    public void accountSpetstoreionEndpointIsCalled() {
-        pet = Pet.builder().build();
+    @When("the user creates a new pet with id: {int}")
+    public void accountSpetstoreionEndpointIsCalled(int id) {
+        pet = Pet.builder().id(id).build();
 
         petClientService.createPetRequest(pet);
 
     }
 
-    @Then("verify pet was created with correct data")
+    @Then("verify the pet was created with correct data")
     public void verifyPetWasCreatedWithCorrectData() {
         assertThat(petClientService.getPetId(pet))
                 .as("Cannot find pet with id: " + pet.getId())
@@ -32,16 +32,26 @@ public class PetStoreApiSteps {
                 .isEqualTo(pet.getName());
     }
 
-    @When("update the pet name to {word}")
+    @When("the user updates the pet name to {word}")
     public void updateThePetNameAndVerify(String name) {
         pet = Pet.builder().name(name).build();
         petClientService.updatePetRequest(pet);
     }
 
-    @Then("verify the pet name has updated to {word}")
+    @Then("verify the pet name is updated to {word}")
     public void verifyThePetNameHasUpdatedToDolphin(String name) {
         assertThat(petClientService.getPetName(pet))
                 .as("Cannot find pet with name: "+ pet.getName())
                 .isEqualTo(name);
+    }
+
+    @When("the user deletes the pet with id: {int}")
+    public void theUserDeletesThePet(int id) {
+        petClientService.deleteAllPets(id);
+    }
+
+    @Then("assert the pet has been deleted")
+    public void assertThePetHasBeenDeleted() {
+        petClientService.assertPetPresent(pet.getId());
     }
 }

@@ -4,9 +4,6 @@ import io.restassured.RestAssured;
 import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.List;
-
 
 @Component
 public class PetClientService {
@@ -33,7 +30,6 @@ public class PetClientService {
                 .when()
                 .put(UPDATE_PET_ENDPOINT)
                 .then()
-                .log().all()
                 .statusCode(HttpStatus.SC_OK);
     }
 
@@ -47,6 +43,16 @@ public class PetClientService {
                     .path("id");
     }
 
+    public void assertPetPresent(int id){
+        RestAssured
+                .given()
+                    .pathParam("petId", id)
+                .when()
+                    .get(GET_PET_ENDPOINT)
+                .then()
+                    .statusCode(HttpStatus.SC_NOT_FOUND);
+    }
+
     public String getPetName(Pet pet) {
         return RestAssured
                 .given()
@@ -57,16 +63,17 @@ public class PetClientService {
                     .path("name");
     }
 
-    public void deleteAllPets() {
-        List<Integer> petIds = Arrays.asList(12345);
-        for (Integer pet: petIds) {
+    public void deleteAllPets(int id) {
+//        List<Integer> petIds = Arrays.asList(12345);
+//        petIds.add(id);
+//        for (Integer pet: petIds) {
             RestAssured
                     .given()
-                        .pathParam("petId", pet)
+                        .pathParam("petId", id)
                     .when()
                         .delete(DELETE_PET_ENDPOINT)
                     .then()
                         .statusCode(HttpStatus.SC_OK);
-        }
+//        }
     }
 }
