@@ -4,6 +4,7 @@ plugins {
 //    id 'maven'
     id 'idea'
     id 'org.sonarqube' version '2.6'
+    id "io.freefair.lombok" version "6.5.0.2"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
