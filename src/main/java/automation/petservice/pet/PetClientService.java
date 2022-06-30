@@ -14,6 +14,7 @@ public class PetClientService {
     private static final String CREATE_PET_ENDPOINT = "/pet";
     private static final String GET_PET_ENDPOINT = "/pet/{petId}";
     private static final String DELETE_PET_ENDPOINT = "/pet/{petId}";
+    private static final String UPDATE_PET_ENDPOINT = "/pet";
 
     public void createPetRequest(Pet pet) {
         RestAssured
@@ -23,6 +24,17 @@ public class PetClientService {
                     .post(CREATE_PET_ENDPOINT)
                 .then()
                     .statusCode(HttpStatus.SC_OK);
+    }
+
+    public void updatePetRequest(Pet pet) {
+        RestAssured
+                .given()
+                .body(pet)
+                .when()
+                .put(UPDATE_PET_ENDPOINT)
+                .then()
+                .log().all()
+                .statusCode(HttpStatus.SC_OK);
     }
 
     public int getPetId(Pet pet) {
