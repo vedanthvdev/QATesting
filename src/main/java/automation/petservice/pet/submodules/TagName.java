@@ -9,16 +9,16 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 public class TagName {
 
     @JsonProperty("id")
-    public Integer id;
+    public int id;
     @JsonProperty("name")
     public String name;
 
-    private TagName(Builder builder) {
+    private TagName(TagName.Builder builder) {
         id = builder.id;
         name = builder.name;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -29,8 +29,8 @@ public class TagName {
 
     @JsonPOJOBuilder
     public static final class Builder {
-        public Integer id;
-        public String name;
+        public int id;
+        public String name = "tagChin";
 
         public Builder withId(Integer id){
             this.id = id;
