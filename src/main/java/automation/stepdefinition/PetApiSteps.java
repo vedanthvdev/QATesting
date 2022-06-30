@@ -1,22 +1,24 @@
 package automation.stepdefinition;
 
-import automation.petservice.pet.Pet;
-import automation.petservice.pet.PetClientService;
+import automation.petapi.Pet;
+import automation.petapi.PetClientService;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PetStoreApiSteps {
+public class PetApiSteps {
     private Pet pet;
     private final PetClientService petClientService;
-    public PetStoreApiSteps(PetClientService petClientService) {
+    public PetApiSteps(PetClientService petClientService) {
         this.petClientService = petClientService;
     }
 
     @When("the user creates a new pet with id: {int}")
     public void accountSpetstoreionEndpointIsCalled(int id) {
-        pet = Pet.builder().id(id).build();
+        pet = Pet.builder()
+                .id(id)
+                .build();
 
         petClientService.createPetRequest(pet);
 

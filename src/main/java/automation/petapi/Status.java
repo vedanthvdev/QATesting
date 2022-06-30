@@ -1,4 +1,4 @@
-package automation.petservice.pet;
+package automation.petapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

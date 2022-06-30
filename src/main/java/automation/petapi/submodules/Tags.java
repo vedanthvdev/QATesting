@@ -1,19 +1,20 @@
-package automation.petservice.pet.submodules;
+package automation.petapi.submodules;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class Tags {
 
     @Builder.Default
-    private int id = 1;
+    public int id = 1;
     @Builder.Default
-    private String name = "catName";
+    public String name = "TName";
 
 }
