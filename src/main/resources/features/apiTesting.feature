@@ -1,6 +1,6 @@
 Feature: Pet Store Api tests
 
-  @run_all @api_test
+  @run_all @api_test @delete_all_pets
   Scenario: Pet
     When the petstore endpoint is called
 #      | categoryName | petName | status    | photoUrls          |
