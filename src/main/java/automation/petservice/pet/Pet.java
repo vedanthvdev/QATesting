@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import automation.petservice.pet.Status;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class Pet {
 
     @Builder.Default
@@ -30,6 +31,6 @@ public class Pet {
     @Builder.Default
     private List<Tags> tags = new ArrayList<> (Arrays.asList(new Tags()));
     @Builder.Default
-    private String status = "Available";
+    private Status status = Status.AVAILABLE;
 
 }
