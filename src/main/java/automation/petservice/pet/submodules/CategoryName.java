@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 public class CategoryName {
 
     @JsonProperty("id")
-    public Integer id;
+    public int id;
     @JsonProperty("name")
     public String name;
 
@@ -17,7 +17,7 @@ public class CategoryName {
         name = builder.name;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -28,10 +28,10 @@ public class CategoryName {
 
     @JsonPOJOBuilder
     public static final class Builder {
-        public Integer id;
-        public String name;
+        public int id;
+        public String name = "Hound";
 
-        public Builder withId(Integer id){
+        public Builder withId(int id){
             this.id = id;
             return this;
         }

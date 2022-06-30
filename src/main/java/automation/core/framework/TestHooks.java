@@ -2,6 +2,10 @@ package automation.core.framework;
 
 import java.util.Date;
 
+import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.logging.LogEntries;
@@ -30,6 +34,22 @@ public class TestHooks {
         testContext.setScenario(scenario);
 //        testContext.createWebDriver();
         logger.info("Running scenario named {}", testContext.getScenarioName());
+    }
+
+    @Before
+    public void apisetup() {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
+        RestAssured.baseURI = "https://petstore.swagger.io";
+        RestAssured.basePath = "/v2";
+
+        RestAssured.requestSpecification = new RequestSpecBuilder()
+                .setContentType(ContentType.JSON)
+                .build();
+
+        RestAssured.responseSpecification = new ResponseSpecBuilder()
+                .expectContentType(ContentType.JSON)
+                .build();
     }
 
     @After(order = 0)
