@@ -80,19 +80,14 @@ public class PetClientService {
                     .path("name");
     }
 
-    public void deletePet() {
-//        List<Integer> petIds = Arrays.asList(12345);
-//        petIds.add(id);
-//        for (Integer pet: petIds) {
-        PetServiceContext petServiceContext = contextManager.getRequiredContext(PetServiceContext.class);
+    public void deletePet(int id) {
         RestAssured
-                    .given()
-                        .pathParam("petId", petServiceContext.getPet().getId())
-                    .when()
-                        .delete(DELETE_PET_ENDPOINT)
-                    .then()
-                        .statusCode(HttpStatus.SC_OK);
-//        }
+                .given()
+                    .pathParam("petId", id)
+                .when()
+                    .delete(DELETE_PET_ENDPOINT)
+                .then()
+                    .statusCode(HttpStatus.SC_OK);
     }
 
     public void deleteAllPets(){

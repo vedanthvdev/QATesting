@@ -18,7 +18,7 @@ public class PetApiSteps extends BaseStepDef {
     }
 
     @When("the user creates a new pet with id: {int}")
-    public void accountSpetstoreionEndpointIsCalled(int id) {
+    public void theUserCreatesANewPetWithId(int id) {
         getContextManager().setContext(PetServiceContext.class, new PetServiceContext());
         PetServiceContext petServiceContext = getContextManager().getOrCreateContext(PetServiceContext.class, PetServiceContext::new);
         petServiceContext.setPet(Pet.builder()
@@ -43,14 +43,14 @@ public class PetApiSteps extends BaseStepDef {
     }
 
     @When("the user updates the pet name to {word}")
-    public void updateThePetNameAndVerify(String name) {
+    public void theUserUpdatesThePetNameTo(String name) {
         PetServiceContext petServiceContext = getContextManager().getRequiredContext(PetServiceContext.class);
         petServiceContext.getPet().setName(name);
         petClientService.updatePetRequest();
     }
 
     @Then("verify the pet name is updated to {word}")
-    public void verifyThePetNameHasUpdatedToDolphin(String name) {
+    public void verifyThePetNameIsUpdatedTo(String name) {
         PetServiceContext petServiceContext = getContextManager().getRequiredContext(PetServiceContext.class);
         assertThat(petClientService.getPetName())
                 .as("Cannot find pet with name: "+ petServiceContext.getPet().getName())
@@ -58,8 +58,8 @@ public class PetApiSteps extends BaseStepDef {
     }
 
     @When("the user deletes the pet with id: {int}")
-    public void theUserDeletesThePet(int id) {
-        petClientService.deletePet();
+    public void theUserDeletesThePetWithId(int id) {
+        petClientService.deletePet(id);
     }
 
     @Then("assert the pet has been deleted")
