@@ -32,7 +32,7 @@ public class TestHooks extends BaseStepDef {
 
         RestAssured.baseURI = "https://petstore.swagger.io";
         RestAssured.basePath = "/v2";
-        RestAssured.authentication.equals("specia-key");
+        RestAssured.authentication.equals(getToken());
         RestAssured.requestSpecification = new RequestSpecBuilder()
                 .addHeader("Authorization", getToken())
                 .setContentType(ContentType.JSON)
@@ -50,7 +50,7 @@ public class TestHooks extends BaseStepDef {
 
     @After("@delete_all_pets")
     public void deletePets() {
-//        petClientService.deleteAllPets();
+        petClientService.deleteAllPets();
     }
 
     private String getToken() {

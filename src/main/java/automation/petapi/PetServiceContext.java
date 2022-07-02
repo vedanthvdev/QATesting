@@ -7,12 +7,5 @@ import lombok.Setter;
 @Setter
 public class PetServiceContext {
 
-//    private int id;
-//    private String name;
-//    private Category category;
-//    private Tags tags;
-//    private Status status;
-//    private String[] photoUrl;
     private Pet pet;
-
 }

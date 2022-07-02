@@ -2,29 +2,34 @@ package automation.stepdefinition;
 
 import automation.context.ContextManager;
 import automation.core.framework.BaseStepDef;
-import automation.petapi.Pet;
-import automation.petapi.PetClientService;
-import automation.petapi.PetServiceContext;
+import automation.petapi.*;
+import automation.petapi.actions.PetActions;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PetApiSteps extends BaseStepDef {
+
     private final PetClientService petClientService;
-    public PetApiSteps(PetClientService petClientService, ContextManager contextManager) {
+    private final PetActions petActions;
+
+    public PetApiSteps(PetClientService petClientService, ContextManager contextManager, PetActions petActions) {
         super(contextManager);
         this.petClientService = petClientService;
+        this.petActions = petActions;
     }
 
-    @When("the user creates a new pet with id: {int}")
-    public void theUserCreatesANewPetWithId(int id) {
-        getContextManager().setContext(PetServiceContext.class, new PetServiceContext());
+    @When("the user creates a new pet")
+    public void theUserCreatesANewPetWithId(DataTable dataTable) {
         PetServiceContext petServiceContext = getContextManager().getOrCreateContext(PetServiceContext.class, PetServiceContext::new);
+
         petServiceContext.setPet(Pet.builder()
-                                    .id(id)
+//                                    .id(id)
                                     .build());
 
+        petActions.updatePet(dataTable);
         petClientService.createPetRequest();
         petClientService.petIdToDeleteAfterTest();
     }
@@ -32,7 +37,7 @@ public class PetApiSteps extends BaseStepDef {
     @Then("verify the pet was created with correct data")
     public void verifyPetWasCreatedWithCorrectData() {
         PetServiceContext petServiceContext = getContextManager().getRequiredContext(PetServiceContext.class);
-        assertThat(petClientService.getPetId())
+        assertThat(petClientService.getPet())
                 .as("Cannot find pet with id: " + petServiceContext.getPet().getId())
                 .isEqualTo(petServiceContext.getPet().getId());
         assertThat(petClientService.getPetName())
@@ -57,9 +62,9 @@ public class PetApiSteps extends BaseStepDef {
                 .isEqualTo(name);
     }
 
-    @When("the user deletes the pet with id: {int}")
-    public void theUserDeletesThePetWithId(int id) {
-        petClientService.deletePet(id);
+    @When("the user deletes the pet")
+    public void theUserDeletesThePetWithId() {
+        petClientService.deletePet();
     }
 
     @Then("assert the pet has been deleted")
