@@ -1,6 +1,7 @@
 package automation.petapi;
 
 import automation.context.ContextManager;
+import automation.petapi.enums.PetEndpoint;
 import io.restassured.RestAssured;
 import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -12,14 +13,8 @@ import java.util.List;
 @Component
 public class PetClientService {
 
-    private static final String CREATE_PET_ENDPOINT = "/pet";
-    private static final String GET_PET_ENDPOINT = "/pet/{petId}";
-    private static final String DELETE_PET_ENDPOINT = "/pet/{petId}";
-    private static final String UPDATE_PET_ENDPOINT = "/pet";
-
     private final ContextManager contextManager;
-    private List<Integer> petId = new ArrayList<Integer>();
-
+    private final List<Integer> petId = new ArrayList<>();
 
     public PetClientService(ContextManager contextManager){
         this.contextManager = contextManager;
@@ -31,7 +26,7 @@ public class PetClientService {
                 .given()
                     .body(petServiceContext.getPet())
                 .when()
-                    .post(CREATE_PET_ENDPOINT)
+                    .post(PetEndpoint.CREATE_PET.getValue())
                 .then()
                     .statusCode(HttpStatus.SC_OK);
     }
@@ -40,22 +35,32 @@ public class PetClientService {
         PetServiceContext petServiceContext = contextManager.getRequiredContext(PetServiceContext.class);
         RestAssured
                 .given()
-                .body(petServiceContext.getPet())
+                    .body(petServiceContext.getPet())
                 .when()
-                .put(UPDATE_PET_ENDPOINT)
+                    .put(PetEndpoint.UPDATE_PET.getValue())
                 .then()
-                .statusCode(HttpStatus.SC_OK);
+                    .statusCode(HttpStatus.SC_OK);
     }
 
-    public int getPetId() {
+    public int getPet() {
         PetServiceContext petServiceContext = contextManager.getRequiredContext(PetServiceContext.class);
         return RestAssured
                 .given()
                     .pathParam("petId", petServiceContext.getPet().getId())
                 .when()
-                    .get(GET_PET_ENDPOINT)
+                    .get(PetEndpoint.GET_PET.getValue())
                 .thenReturn()
                     .path("id");
+    }
+
+    public int getPet(int id) {
+        return RestAssured
+                .given()
+                    .pathParam("petId", id)
+                .when()
+                    .get(PetEndpoint.GET_PET.getValue())
+                .thenReturn()
+                    .statusCode();
     }
 
     public void assertPetDeleted(){
@@ -64,7 +69,7 @@ public class PetClientService {
                 .given()
                     .pathParam("petId", petServiceContext.getPet().getId())
                 .when()
-                    .get(GET_PET_ENDPOINT)
+                    .get(PetEndpoint.GET_PET.getValue())
                 .then()
                     .statusCode(HttpStatus.SC_NOT_FOUND);
     }
@@ -75,17 +80,18 @@ public class PetClientService {
                 .given()
                     .pathParam("petId", petServiceContext.getPet().getId())
                 .when()
-                    .get(GET_PET_ENDPOINT)
+                    .get(PetEndpoint.GET_PET.getValue())
                 .thenReturn()
                     .path("name");
     }
 
-    public void deletePet(int id) {
+    public void deletePet() {
+        PetServiceContext petServiceContext = contextManager.getRequiredContext(PetServiceContext.class);
         RestAssured
                 .given()
-                    .pathParam("petId", id)
+                    .pathParam("petId", petServiceContext.getPet().getId())
                 .when()
-                    .delete(DELETE_PET_ENDPOINT)
+                    .delete(PetEndpoint.DELETE_PET.getValue())
                 .then()
                     .statusCode(HttpStatus.SC_OK);
     }
@@ -94,13 +100,15 @@ public class PetClientService {
         List<Integer> petIds = petIdToDeleteAfterTest();
         if(!petIds.isEmpty()){
             for (Integer pet: petIds){
-                RestAssured
-                        .given()
-                        .pathParam("petId", pet)
-                        .when()
-                        .delete(DELETE_PET_ENDPOINT)
-                        .then()
-                        .statusCode(HttpStatus.SC_OK);
+                if(getPet(pet)==HttpStatus.SC_OK) {
+                    RestAssured
+                            .given()
+                                .pathParam("petId", pet)
+                            .when()
+                                .delete(PetEndpoint.DELETE_PET.getValue())
+                            .then()
+                                .statusCode(HttpStatus.SC_OK);
+                }
             }
         }
     }

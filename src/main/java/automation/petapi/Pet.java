@@ -1,5 +1,6 @@
 package automation.petapi;
 
+import automation.petapi.enums.Status;
 import automation.petapi.submodules.Category;
 import automation.petapi.submodules.Tags;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,6 @@ public class Pet {
     @Builder.Default
     private List<Tags> tags = new ArrayList<> (Arrays.asList(new Tags()));
     @Builder.Default
-    private Status status = Status.AVAILABLE;
+    private Status status = Status.pending;
 
 }
