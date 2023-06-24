@@ -15,3 +15,7 @@ Feature: Pet Store Api tests
     Examples:
     | updateName |
     | Thanos     |
+
+  @sel
+  Scenario: login
+    When the user is in login page
