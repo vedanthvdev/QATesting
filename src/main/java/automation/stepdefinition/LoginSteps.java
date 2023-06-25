@@ -23,7 +23,6 @@ public class LoginSteps extends BaseStepDef{
     @When("the user is in login page")
     public void userInHome() {
         seleniumUtils.navigateToUrl("https://www.google.com/maps");
-//        seleniumWait.visibilityOf("sdfsdf");
     }
 
     @When("verify login fields are present")
