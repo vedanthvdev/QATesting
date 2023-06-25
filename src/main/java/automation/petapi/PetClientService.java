@@ -14,6 +14,7 @@ import java.util.List;
 public class PetClientService {
 
     private final ContextManager contextManager;
+    private final String P_ID = "petId";
     private final List<Integer> petId = new ArrayList<>();
 
     public PetClientService(ContextManager contextManager){
@@ -46,7 +47,7 @@ public class PetClientService {
         PetServiceContext petServiceContext = contextManager.getRequiredContext(PetServiceContext.class);
         return RestAssured
                 .given()
-                    .pathParam("petId", petServiceContext.getPet().getId())
+                    .pathParam(P_ID, petServiceContext.getPet().getId())
                 .when()
                     .get(PetEndpoint.GET_PET.getValue())
                 .thenReturn()
@@ -56,7 +57,7 @@ public class PetClientService {
     public int getPet(int id) {
         return RestAssured
                 .given()
-                    .pathParam("petId", id)
+                    .pathParam(P_ID, id)
                 .when()
                     .get(PetEndpoint.GET_PET.getValue())
                 .thenReturn()
@@ -67,7 +68,7 @@ public class PetClientService {
         PetServiceContext petServiceContext = contextManager.getRequiredContext(PetServiceContext.class);
         RestAssured
                 .given()
-                    .pathParam("petId", petServiceContext.getPet().getId())
+                    .pathParam(P_ID, petServiceContext.getPet().getId())
                 .when()
                     .get(PetEndpoint.GET_PET.getValue())
                 .then()
@@ -78,7 +79,7 @@ public class PetClientService {
         PetServiceContext petServiceContext = contextManager.getRequiredContext(PetServiceContext.class);
         return RestAssured
                 .given()
-                    .pathParam("petId", petServiceContext.getPet().getId())
+                    .pathParam(P_ID, petServiceContext.getPet().getId())
                 .when()
                     .get(PetEndpoint.GET_PET.getValue())
                 .thenReturn()
@@ -89,7 +90,7 @@ public class PetClientService {
         PetServiceContext petServiceContext = contextManager.getRequiredContext(PetServiceContext.class);
         RestAssured
                 .given()
-                    .pathParam("petId", petServiceContext.getPet().getId())
+                    .pathParam(P_ID, petServiceContext.getPet().getId())
                 .when()
                     .delete(PetEndpoint.DELETE_PET.getValue())
                 .then()
@@ -103,7 +104,7 @@ public class PetClientService {
                 if(getPet(pet)==HttpStatus.SC_OK) {
                     RestAssured
                             .given()
-                                .pathParam("petId", pet)
+                                .pathParam(P_ID, pet)
                             .when()
                                 .delete(PetEndpoint.DELETE_PET.getValue())
                             .then()
