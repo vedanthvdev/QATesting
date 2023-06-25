@@ -56,7 +56,7 @@ public class TestHooks extends BaseStepDef {
 
             // Check if the JAR file is already running
             if (isNodeRunning()) {
-                System.out.println("The JAR file is already running.");
+                logger.info("The JAR file is already running.");
                 return;
             }
             // Execute the command
@@ -69,9 +69,9 @@ public class TestHooks extends BaseStepDef {
             int exitCode = process.waitFor();
 
             if (exitCode == 0) {
-                System.out.println("Command executed successfully.");
+                logger.info("Node started successfully.");
             } else {
-                System.err.println("Command execution failed with exit code: " + exitCode);
+                logger.warn("Node starting Command execution failed with exit code: "+ exitCode);
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -158,8 +158,6 @@ public class TestHooks extends BaseStepDef {
         petClientService.deleteAllPets();
     }
 
-    private String getToken() {
-        return "special-key";
-    }
+    private String getToken() {return "special-key";}
 
 }

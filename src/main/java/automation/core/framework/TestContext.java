@@ -33,7 +33,6 @@ public class TestContext {
 
     public WebDriver createWebDriver() {
         BrowserProvider browserProvider = Optional.ofNullable(BROWSER_UNDER_TEST).map(String::toUpperCase).map(BrowserProvider::valueOf).orElse(BrowserProvider.CHROME);
-        WebDriver webDriver = null;
         int retryCount = 0;
         int maxRetries = 2;
         while (retryCount < maxRetries) {

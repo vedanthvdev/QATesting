@@ -8,15 +8,13 @@ import io.cucumber.java.en.When;
 
 public class LoginSteps extends BaseStepDef{
     private final SeleniumUtils seleniumUtils;
-    private final SeleniumWait seleniumWait;
 
 
     public LoginSteps(ContextManager contextManager
-            , SeleniumUtils seleniumUtils, SeleniumWait seleniumWait
+            , SeleniumUtils seleniumUtils
     ) {
         super(contextManager);
         this.seleniumUtils = seleniumUtils;
-        this.seleniumWait = seleniumWait;
     }
 
 
@@ -27,7 +25,7 @@ public class LoginSteps extends BaseStepDef{
 
     @When("verify login fields are present")
     public void userVerifyLoginPage() {
-
+        // will be implemeted
     }
 
 }
