@@ -1,16 +1,14 @@
-#Welcome to the APi testing of petStore
-
-#Clone the project into the machiene
+#Welcome to the APi/Selenium testing framework
 
 #Java Version 17 corretto is the JRE being used. Please set your environment of your ide accordingly
 
-#Install few plugins like lombok, Cucumber for Java, Gherkin
+#Install few plugins like lombok, Cucumber for Java, Gherkin in IDE
 
-#Open the features folder to select the petapitest.feature file and then run the first scenario 
-by clicking the green play icon to the left of the Scenario.
+#Clone the project
 
-#Ignore the code with webdriver and chrome driver... I am trying to 
-implement a selenium project alongside in this repo.
+#To run the selenium test, Open the terminal or command prompt(Win) and runn the below command to start the node
+
+~ java -jar /path/to/project/QATesting/node/selenium-server-4.10.0.jar standalone --selenium-manager true
 
 #Mac(Intel and M1) and windows compatible(Tested).
 
