@@ -1,5 +1,6 @@
 package automation.core.framework;
 
+import java.io.*;
 import java.util.Date;
 
 import automation.context.ContextManager;
@@ -41,9 +42,58 @@ public class TestHooks extends BaseStepDef {
 
         TestContext testContext = new TestContext();
         getContextManager().setContext(TestContext.class, testContext);
+//        triggerNode();
 
         testContext.setScenario(scenario);
         logger.info("Running scenario named {}", testContext.getScenarioName());
+    }
+
+
+    public void triggerNode() {
+        String command = "java -jar ../QATesting/node/selenium-server-4.10.0.jar standalone --selenium-manager true";
+
+        try {
+
+            // Check if the JAR file is already running
+            if (isNodeRunning()) {
+                System.out.println("The JAR file is already running.");
+                return;
+            }
+            // Execute the command
+            ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
+            processBuilder.inheritIO();
+            Process process = processBuilder.start();
+
+
+            // Wait for the process to finish
+            int exitCode = process.waitFor();
+
+            if (exitCode == 0) {
+                System.out.println("Command executed successfully.");
+            } else {
+                System.err.println("Command execution failed with exit code: " + exitCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean isNodeRunning() throws IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder("jps", "-l");
+        Process process = processBuilder.start();
+
+        // Read the process output
+        InputStream inputStream = process.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            // Check if the JAR file is running
+            if (line.contains("selenium-server-4.8.1.jar")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Before

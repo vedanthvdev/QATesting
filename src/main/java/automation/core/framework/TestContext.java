@@ -32,7 +32,6 @@ public class TestContext {
 
 
     public WebDriver createWebDriver() {
-//        System.setProperty("webdriver.http.factory", "jdk-http-client");
         BrowserProvider browserProvider = Optional.ofNullable(BROWSER_UNDER_TEST).map(String::toUpperCase).map(BrowserProvider::valueOf).orElse(BrowserProvider.CHROME);
         WebDriver webDriver = null;
         int retryCount = 0;
