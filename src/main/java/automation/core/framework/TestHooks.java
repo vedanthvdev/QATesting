@@ -14,12 +14,14 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,8 +119,11 @@ public class TestHooks extends BaseStepDef {
     public void captureScreenshot(Scenario scenario) {
         TestContext testContext = getContextManager().getRequiredContext(TestContext.class);
         try {
-            if (testContext.isWebDriverInitialised()) {
-                LogEntries logEntries = testContext.getWebDriver().manage().logs().get(LogType.BROWSER);
+            WebDriver driver = testContext.getWebDriver();
+            Capabilities capabilities = ((RemoteWebDriver) driver).getCapabilities();
+
+            if (testContext.isWebDriverInitialised() && !capabilities.getBrowserName().equals("firefox")) {
+                LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
                 for (LogEntry entry : logEntries) {
                     logger.info("{}, {}, {}", new Date(entry.getTimestamp()), entry.getLevel(), entry.getMessage());
                 }
