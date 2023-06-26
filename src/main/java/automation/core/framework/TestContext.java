@@ -5,6 +5,11 @@ import io.cucumber.java.Scenario;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.remote.Augmenter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
@@ -14,6 +19,9 @@ import java.util.Optional;
 
 @Component
 public class TestContext {
+
+    private static final Logger logger = LoggerFactory.getLogger(TestContext.class);
+
 
     private String scenarioName;
     private WebDriver webDriver;
@@ -35,9 +43,12 @@ public class TestContext {
         BrowserProvider browserProvider = Optional.ofNullable(BROWSER_UNDER_TEST).map(String::toUpperCase).map(BrowserProvider::valueOf).orElse(BrowserProvider.CHROME);
         int retryCount = 0;
         int maxRetries = 2;
+
+        String DEFAULT_WEB_DRIVER_ENDPOINT = WEB_DRIVER_ENDPOINT==null ? "http://localhost:4444/wd/hub" : WEB_DRIVER_ENDPOINT;
+
         while (retryCount < maxRetries) {
             try {
-                webDriver = Optional.ofNullable(WEB_DRIVER_ENDPOINT)
+                webDriver = Optional.of(DEFAULT_WEB_DRIVER_ENDPOINT)
                         .map(TestContext::toUrl)
                         .map(u -> (WebDriver) browserProvider.createRemoteWebDriver(u)).orElseGet(browserProvider::createWebDriver);
                 webDriver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
@@ -71,6 +82,21 @@ public class TestContext {
             return webDriver;
         }
     }
+
+    public synchronized DevTools getDevTools() {
+        webDriver =  new Augmenter().augment(webDriver);
+
+        DevTools devTools = ((HasDevTools) webDriver).getDevTools();
+        try {
+            devTools.createSessionIfThereIsNotOne();
+        } catch (Exception e) {
+            logger.warn("devtool session creation failed " + e);
+        }
+        return devTools;
+    }
+
+
+
 
     public boolean isWebDriverInitialised() {
         return webDriver != null;

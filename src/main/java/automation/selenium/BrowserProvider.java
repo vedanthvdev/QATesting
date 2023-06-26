@@ -20,7 +20,10 @@ public enum BrowserProvider {
         @Override
         public FirefoxOptions createCapabilities() {
             FirefoxOptions firefoxOptions = new FirefoxOptions();
-            firefoxOptions.setCapability("TakesScreenshot", true);
+            firefoxOptions.addArguments("--test-type");
+            firefoxOptions.addArguments("--disable-blink-features");
+            firefoxOptions.addArguments("--disable-blink-features=AutomationControlled");
+            firefoxOptions.setCapability("moz:webdriverClick", true);
             return firefoxOptions;
         }
 
