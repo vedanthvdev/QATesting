@@ -1,4 +1,4 @@
-#Welcome to the APi/Selenium testing framework
+#Welcome to the APi/Selenium java testing framework
 
 #Java Version 17 corretto is the JRE being used. Please set your environment of your ide accordingly
 
