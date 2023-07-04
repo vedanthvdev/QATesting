@@ -18,6 +18,7 @@
 To trigger hub and then register a node into that hub do the below
 
 terminal:
+
 ~ java -jar /Users/chintuvedanth/IdeaProjects/QATesting/node/selenium-server-4.10.0.jar hub
 
 ~ java -jar /Users/chintuvedanth/IdeaProjects/QATesting/node/selenium-server-4.10.0.jar node --hub "http://localhost:4444/wd/hub" --selenium-manager true
